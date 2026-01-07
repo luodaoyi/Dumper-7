@@ -1044,7 +1044,7 @@ std::string CppGenerator::GetMemberTypeStringWithoutConst(UEProperty Member, int
 
 		return "class UObject*";
 	}
-	else if (Settings::EngineCore::bEnableEncryptedObjectPropertySupport && Flags & EClassCastFlags::ObjectPropertyBase && Member.GetSize() == 0x10)
+	else if (Settings::EngineCore::bEnableEncryptedObjectPropertySupport && Flags & EClassCastFlags::ObjectPropertyBase)
 	{
 		if (UEClass PropertyClass = Member.Cast<UEObjectProperty>().GetPropertyClass())
 			return std::format("TEncryptedObjPtr<class {}>", GetStructPrefixedName(PropertyClass));
@@ -2528,14 +2528,14 @@ R"({
 		},
 		PredefinedFunction {
 			.CustomComment = "Checks if this class has a certain base",
-			.ReturnType = "bool", .NameWithParams = "IsSubclassOf(const FName& baseClassName)", .Body =
+			.ReturnType = "bool", .NameWithParams = "IsSubclassOf(const FName& BaseClassName)", .Body =
 R"({
-	if (baseClassName.IsNone())
+	if (BaseClassName.IsNone())
 		return false;
 
 	for (const UStruct* Struct = this; Struct; Struct = Struct->SuperStruct)
 	{
-		if (Struct->Name == baseClassName)
+		if (Struct->Name == BaseClassName)
 			return true;
 	}
 
@@ -4335,8 +4335,8 @@ R"({
 		},
 		PredefinedMember {
 			.Comment = "NOT AUTO-GENERATED PROPERTY",
-			.Type = "int32", .Name = "ComparisonIndex = 0x0", .Offset = 0x0, .Size = sizeof(int32), .ArrayDim = 0x1, .Alignment = alignof(int32),
-			.bIsStatic = false, .bIsZeroSizeMember = false, .bIsBitField = false, .BitIndex = 0xFF,
+			.Type = "int32", .Name = "ComparisonIndex", .Offset = 0x0, .Size = sizeof(int32), .ArrayDim = 0x1, .Alignment = alignof(int32),
+			.bIsStatic = false, .bIsZeroSizeMember = false, .bIsBitField = false, .BitIndex = 0xFF, .DefaultValue = "0x0"
 		},
 	};
 
@@ -4397,8 +4397,8 @@ R"({
 	{
 		FName.Properties.push_back(PredefinedMember{
 			.Comment = "NOT AUTO-GENERATED PROPERTY",
-			.Type = (Settings::Internal::bUseNamePool ? "uint32" : "int32"), .Name = "Number = 0x0", .Offset = Off::FName::Number, .Size = sizeof(int32), .ArrayDim = 0x1, .Alignment = alignof(int32),
-			.bIsStatic = false, .bIsZeroSizeMember = false, .bIsBitField = false, .BitIndex = 0xFF,
+			.Type = (Settings::Internal::bUseNamePool ? "uint32" : "int32"), .Name = "Number", .Offset = Off::FName::Number, .Size = sizeof(int32), .ArrayDim = 0x1, .Alignment = alignof(int32),
+			.bIsStatic = false, .bIsZeroSizeMember = false, .bIsBitField = false, .BitIndex = 0xFF, .DefaultValue = "0x0"
 			}
 		);
 	}
@@ -4409,8 +4409,8 @@ R"({
 
 		FName.Properties.push_back(PredefinedMember{
 			.Comment = "NOT AUTO-GENERATED PROPERTY",
-			.Type = "int32", .Name = "DisplayIndex = 0x0", .Offset = DisplayIndexOffset, .Size = sizeof(int32), .ArrayDim = 0x1, .Alignment = alignof(int32),
-			.bIsStatic = false, .bIsZeroSizeMember = false, .bIsBitField = false, .BitIndex = 0xFF,
+			.Type = "int32", .Name = "DisplayIndex", .Offset = DisplayIndexOffset, .Size = sizeof(int32), .ArrayDim = 0x1, .Alignment = alignof(int32),
+			.bIsStatic = false, .bIsZeroSizeMember = false, .bIsBitField = false, .BitIndex = 0xFF, .DefaultValue = "0x0"
 			}
 		);
 	}
